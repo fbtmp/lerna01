@@ -34,7 +34,7 @@ jobs:
           yarn logout
           #npm config set //registry.npmjs.org/:_authToken ${NODE_AUTH_TOKEN}
           npm whoami
-          #echo "@fbtmp:registry=http://registry.npmjs.org/" > .npmrc
+          echo "@fbtmp:registry=http://registry.npmjs.org/" > .npmrc
           echo "registry=http://registry.npmjs.org/" >> .npmrc
           echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" >> .npmrc
           npm whoami
