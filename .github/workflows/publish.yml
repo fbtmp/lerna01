@@ -6,8 +6,38 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set Git user
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
       - uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
-      - run: yarn --frozen-lockfile
-      - run: yarn test
+          node-version: '16'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Authenticate with npm registry
+        run: |
+          npm config set //registry.npmjs.org/:_authToken ${NODE_AUTH_TOKEN}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Set variables
+        id: vars
+        run: |
+          echo ::set-output name=currentMajor::"$(jq -r .version lerna.json | sed 's/\([0-9]*\).*/\1/')"
+          echo ::set-output name=nextMinor::"echo \"$((npm --silent info @fbtmp/lerna01-pkg01 version || echo '0.0.0') | sed 's/\([0-9]*\)\.\([0-9]*\).*/\2/')+1\"|bc"
+      - name: Release minor
+        if: ${GITHUB_REF#refs/heads/} == ${{ github.event.repository.default_branch }}
+        run: |
+          echo "git checkout -b v0.$MINOR"
+          echo "yarn --frozen-lockfile"
+          echo "yarn lerna publish 0.$MINOR.0 --yes --exact"
+        env:
+          MINOR: ${{ steps.vars.outputs.nextMinor }}
+      - name: Release patch
+        if: ${{ steps.vars.outputs.currentMajor }} == 0
+        run: |
+          echo "git checkout ${GITHUB_REF#refs/heads/}"
+          echo "yarn --frozen-lockfile"
+          echo "yarn lerna publish patch --yes --exact"
+      - run: git push --all --follow-tags
