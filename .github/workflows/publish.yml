@@ -29,14 +29,14 @@ jobs:
         if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         run: |
           git checkout -b v0.$((MINOR+1))
-#          git push -u origin v0.$((MINOR+1))
+          # git push -u origin v0.$((MINOR+1))
           yarn --frozen-lockfile
           yarn logout
           npm config set //registry.npmjs.org/:_authToken ${NODE_AUTH_TOKEN}
           npm whoami
           echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" >> .npmrc
           npm whoami
-#          yarn lerna publish 0.$((MINOR+1)).0 --yes --exact
+          # yarn lerna publish 0.$((MINOR+1)).0 --yes --exact
         env:
           MINOR: ${{ steps.vars.outputs.lastMinor }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
