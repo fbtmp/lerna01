@@ -16,10 +16,6 @@ jobs:
         with:
           node-version: '16'
           registry-url: 'https://registry.npmjs.org'
-#      - name: Authenticate with npm registry
-#        run: npm config set //registry.npmjs.org/:_authToken ${NODE_AUTH_TOKEN}
-#        env:
-#          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Set variables
         id: vars
         run: |
@@ -31,17 +27,10 @@ jobs:
           git checkout -b v0.$((MINOR+1))
           git push -u origin v0.$((MINOR+1))
           yarn --frozen-lockfile
-          #yarn logout
-          #npm config set //registry.npmjs.org/:_authToken ${NODE_AUTH_TOKEN}
-          #echo "@fbtmp:registry=https://registry.npmjs.org/" > .npmrc
-          #echo "registry=https://registry.npmjs.org/" >> .npmrc
-          #echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" >> .npmrc
-          npm whoami
           yarn lerna publish 0.$((MINOR+1)).0 --yes --exact
         env:
           MINOR: ${{ steps.vars.outputs.lastMinor }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Release patch
         if: ${{ steps.vars.outputs.currentMajor == 0 }}
         run: |
