@@ -27,7 +27,7 @@ jobs:
           git checkout -b v0.$((MINOR+1))
           git push -u origin v0.$((MINOR+1))
           yarn --frozen-lockfile
-          yarn lerna publish 0.$((MINOR+1)).0 --yes --exact --no-verify-access
+          yarn lerna publish 0.$((MINOR+1)).0 --yes --exact --force-publish --no-verify-access
         env:
           MINOR: ${{ steps.vars.outputs.lastMinor }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -36,7 +36,7 @@ jobs:
         run: |
           git checkout ${GITHUB_REF#refs/heads/}
           yarn --frozen-lockfile
-          yarn lerna publish patch --yes --exact --no-verify-access
+          yarn lerna publish patch --yes --exact --force-publish --no-verify-access
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - run: git push --all --follow-tags
