@@ -31,12 +31,11 @@ jobs:
           git checkout -b v0.$((MINOR+1))
           git push -u origin v0.$((MINOR+1))
           yarn --frozen-lockfile
-          yarn logout
+          #yarn logout
           #npm config set //registry.npmjs.org/:_authToken ${NODE_AUTH_TOKEN}
-          npm whoami
           #echo "@fbtmp:registry=https://registry.npmjs.org/" > .npmrc
           #echo "registry=https://registry.npmjs.org/" >> .npmrc
-          echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" >> .npmrc
+          #echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" >> .npmrc
           npm whoami
           yarn lerna publish 0.$((MINOR+1)).0 --yes --exact
         env:
