@@ -1,0 +1,22 @@
+{
+  "name": "@local/lerna01-pkg02",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Frieder Bluemle <frieder.bluemle@gmail.com>",
+  "homepage": "",
+  "license": "ISC",
+  "main": "lib/lerna01-pkg02.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "http://localhost:4873"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  }
+}
