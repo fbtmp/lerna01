@@ -31,6 +31,7 @@ jobs:
           git checkout -b v0.$((MINOR+1))
           git push -u origin v0.$((MINOR+1))
           yarn --frozen-lockfile
+          yarn logout
           npm config set //registry.npmjs.org/:_authToken ${NODE_AUTH_TOKEN}
           yarn lerna publish 0.$((MINOR+1)).0 --yes --exact
         env:
