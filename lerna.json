@@ -5,7 +5,10 @@
   "version": "1000.0.0",
   "command": {
     "version": {
-      "allowBranch": ["master", "v0.*"]
+      "allowBranch": [
+        "master",
+        "v0.*"
+      ]
     }
   }
 }
