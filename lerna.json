@@ -2,10 +2,13 @@
   "packages": [
     "packages/*"
   ],
-  "version": "1000.0.0",
+  "version": "0.2.0",
   "command": {
     "version": {
-      "allowBranch": ["master", "v0.*"]
+      "allowBranch": [
+        "master",
+        "v0.*"
+      ]
     }
   }
 }
