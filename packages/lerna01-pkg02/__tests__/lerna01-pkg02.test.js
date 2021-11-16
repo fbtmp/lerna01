@@ -2,6 +2,6 @@
 
 const lerna01Pkg02 = require('..');
 
-describe('@local/lerna01-pkg02', () => {
+describe('@fbtmp/lerna01-pkg02', () => {
   it('needs tests');
 });

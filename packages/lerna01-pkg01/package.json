@@ -1,5 +1,5 @@
 {
-  "name": "@local/lerna01-pkg01",
+  "name": "@fbtmp/lerna01-pkg01",
   "version": "0.1.1",
   "main": "lib/lerna01-pkg01.js",
   "directories": {
