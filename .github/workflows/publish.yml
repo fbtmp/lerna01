@@ -28,18 +28,15 @@ jobs:
           git checkout -b v0.$((MINOR+1))
           git push -u origin v0.$((MINOR+1))
           yarn lerna publish 0.$((MINOR+1)).0 --yes --exact --force-publish --no-verify-access
-          echo "TAG=v0.$((MINOR+1)).0" >> $GITHUB_ENV
         env:
           MINOR: ${{ steps.vars.outputs.lastMinor }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Release patch
         if: startsWith(steps.vars.outputs.currentVersion, '0.')
-        run: |
-          yarn lerna publish patch --yes --exact --force-publish --no-verify-access
-          echo "TAG=v$(jq -r .version lerna.json)" >> $GITHUB_ENV
+        run: yarn lerna publish patch --yes --exact --force-publish --no-verify-access
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - run: git push --all --follow-tags
+      - run: echo "TAG_NAME=v$(jq -r .version lerna.json)" >> $GITHUB_ENV
       - name: Create Release Notes
         uses: actions/github-script@v5
         with:
@@ -47,5 +44,5 @@ jobs:
             await github.request(`POST /repos/${{ github.repository }}/releases`, {
               draft: true,
               generate_release_notes: true,
-              tag_name: "${{ env.TAG }}"
+              tag_name: "${{ env.TAG_NAME }}"
             });
