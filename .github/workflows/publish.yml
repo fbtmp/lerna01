@@ -1,48 +1,23 @@
 name: publish
 on:
-  workflow_dispatch:
+  release:
+    types: [published]
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - uses: actions/setup-node@v2
         with:
           node-version: '16'
           registry-url: 'https://registry.npmjs.org'
-      - name: Set Git user
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
       - name: Set variables
         id: vars
         run: |
           echo ::set-output name=currentVersion::"$(jq -r .version lerna.json)"
           echo ::set-output name=lastMinor::"$((npm --silent info @fbtmp/lerna01-pkg01 version || echo '0.0.0') | sed 's/[0-9]*\.\([0-9]*\).*/\1/')"
       - run: yarn --frozen-lockfile
-      - name: Release minor version
-        if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
-        run: |
-          git checkout -b v0.$((MINOR+1))
-          git push -u origin v0.$((MINOR+1))
-          yarn lerna publish 0.$((MINOR+1)).0 --yes --exact --force-publish --no-verify-access
-        env:
-          MINOR: ${{ steps.vars.outputs.lastMinor }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Release patch version
-        if: startsWith(steps.vars.outputs.currentVersion, '0.')
-        run: yarn lerna publish patch --yes --exact --force-publish --no-verify-access
+      - run: yarn lerna exec --no-bail npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - run: echo "TAG_NAME=v$(jq -r .version lerna.json)" >> $GITHUB_ENV
-      - name: Create Release Notes
-        uses: actions/github-script@v5
-        with:
-          script: |
-            await github.request(`POST /repos/${{ github.repository }}/releases`, {
-              draft: true,
-              generate_release_notes: true,
-              tag_name: "${{ env.TAG_NAME }}"
-            });
