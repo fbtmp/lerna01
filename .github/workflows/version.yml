@@ -10,8 +10,8 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v2
         with:
+          check-latest: true
           node-version: '16'
-          registry-url: 'https://registry.npmjs.org'
       - name: Set Git user
         run: |
           git config user.name 'github-actions[bot]'
