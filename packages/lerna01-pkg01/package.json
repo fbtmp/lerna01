@@ -1,6 +1,6 @@
 {
   "name": "@fbtmp/lerna01-pkg01",
-  "version": "1000.0.0",
+  "version": "0.11.0",
   "main": "lib/lerna01-pkg01.js",
   "directories": {
     "lib": "lib",
