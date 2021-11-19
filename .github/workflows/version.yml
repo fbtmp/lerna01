@@ -16,12 +16,12 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-      - run: npm cache clear --force
       - name: Set variables
         id: vars
         run: |
           echo ::set-output name=currentVersion::"$(jq -r .version lerna.json)"
           echo ::set-output name=lastMinor::"$((npm --silent info @fbtmp/lerna01-pkg01 version || echo '0.0.0') | sed 's/[0-9]*\.\([0-9]*\).*/\1/')"
+      - run: npm info @fbtmp/lerna01-pkg01 version
       - run: |
           echo $MINOR
           echo "git checkout -b v0.$((MINOR+1))"
