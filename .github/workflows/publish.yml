@@ -11,13 +11,7 @@ jobs:
         with:
           node-version: '16'
           registry-url: 'https://registry.npmjs.org'
-      - name: Set variables
-        id: vars
-        run: |
-          echo ::set-output name=currentVersion::"$(jq -r .version lerna.json)"
-          echo ::set-output name=lastMinor::"$((npm --silent info @fbtmp/lerna01-pkg01 version || echo '0.0.0') | sed 's/[0-9]*\.\([0-9]*\).*/\1/')"
       - run: yarn --frozen-lockfile
       - run: yarn lerna exec --no-bail npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - run: echo "TAG_NAME=v$(jq -r .version lerna.json)" >> $GITHUB_ENV
