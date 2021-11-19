@@ -15,6 +15,6 @@ jobs:
         with:
           script: console.log(context)
       - run: yarn --frozen-lockfile
-      - run: yarn lerna exec --no-bail 'npm publish --access public'
+      - run: yarn lerna publish from-git -y'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
