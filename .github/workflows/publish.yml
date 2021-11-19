@@ -11,9 +11,6 @@ jobs:
         with:
           node-version: '16'
           registry-url: 'https://registry.npmjs.org'
-      - uses: actions/github-script@v5
-        with:
-          script: console.log(context)
       - run: yarn --frozen-lockfile
       - run: yarn lerna publish from-git -y'
         env:
